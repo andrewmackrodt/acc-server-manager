@@ -1,0 +1,29 @@
+@import "env";
+
+.custom-switch {
+  height: 2.5rem;
+  line-height: 2.25rem;
+}
+
+.custom-switch .custom-control-input ~ {
+  &:checked .custom-control-label::after {
+    left: calc(-1.5rem);
+  }
+
+  .custom-control-label::before {
+    border-radius: 0 !important;
+    height: 1.75rem !important;
+    width: 3rem !important;
+  }
+
+  .custom-control-label::after {
+    border-radius: 0 !important;
+    height: calc(1.75rem - 4px) !important;
+    left: calc(-2rem - 2px);
+    width: calc(1.5rem - 2px) !important;
+  }
+
+  .custom-control-label {
+    padding-left: 1.5rem;
+  }
+}

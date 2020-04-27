@@ -1,0 +1,27 @@
+---
+version: "2.1"
+
+services:
+  npm:
+    image: andrewmackrodt/nodejs-chromium
+    working_dir: /app
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+      - npm
+    command: run start
+    environment:
+      - PUID=${UID:-}
+      - GUID=${UID:-}
+      - TZ=${TZ:-Europe/London}
+    ports:
+      - ${WEBPACK_HOST:-127.0.0.1}:${WEBPACK_PORT:-8080}:8080
+    volumes:
+      - config:/home/ubuntu/.config
+      - npm:/home/ubuntu/.npm
+      - node_modules:/home/ubuntu/node_modules
+      - ./:/app
+
+volumes:
+  config:
+  npm:
+  node_modules:
