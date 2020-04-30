@@ -5,7 +5,7 @@
                 <li class="nav-item">
                     <router-link class="nav-link p-0" to="/">
                         <span><img class="navbar-brand"
-                                   src="assets/icons/favicon-48x48.svg"
+                                   src="../../assets/icons/favicon-48x48.svg"
                                    alt="Assetto Corsa Competizione"
                                    :style="{
                                        'max-height': '40px',

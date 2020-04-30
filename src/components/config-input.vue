@@ -38,20 +38,16 @@
     @Component
     export default class ConfigInputComponent extends Vue {
         @Prop() protected readonly field!: ConfigField
-        @Prop() protected readonly value!: string
+
+        @Prop({ type: [String, Number, Boolean, Array] })
+        protected readonly value!: any
 
         protected inputValue: any = ''
 
         public created() {
-            if (this.isCheckbox) {
-                if (this.field.isNumberBoolean) {
-                    this.inputValue = this.value === '1'
-                } else {
-                    this.inputValue = this.value === 'true'
-                }
-            } else {
-                this.inputValue = this.value
-            }
+            this.inputValue = this.field.isArray
+                ? JSON.stringify(this.value, null, 2)
+                : this.value
 
             this.$watch('inputValue', this.onChange)
         }
@@ -97,13 +93,32 @@
         }
 
         protected onChange(value: any) {
-            if (typeof value === 'boolean' && this.field.isNumberBoolean) {
+            if ( ! this.field.isRequired && value === '') {
+                value = undefined
+            } else if (this.field.isNumberBoolean) {
                 value = value ? 1 : 0
+            } else if (this.field.isNumber) {
+                value = Number.parseFloat(value)
+
+                if (Number.isNaN(value)) {
+                    console.error(`Not a number: ${this.field.name} = ${value}`)
+                    value = undefined
+                }
+            } else if (this.field.isArray) {
+                try {
+                    let json = JSON.parse(value)
+                    if ( ! Array.isArray(json)) {
+                        console.error(`Not an array: ${this.field.name} = ${value}`)
+                        json = undefined
+                    }
+                    value = json
+                } catch (e) {
+                    console.error(`Invalid json: ${this.field.name}`, e)
+                    value = undefined
+                }
             }
-            if (typeof value === 'number') {
-                value = value.toString(10)
-            }
-            this.$emit('change', value.toString())
+
+            this.$emit('change', value)
         }
     }
 </script>
