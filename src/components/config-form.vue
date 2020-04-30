@@ -35,8 +35,12 @@
                 let value = this.config[field.name]
                 if (typeof value === 'undefined') {
                     value = ''
-                } else {
+                } else if (value === 'null' || typeof value === 'boolean') {
                     value = value.toString()
+                } else if (typeof value === 'number') {
+                    value = value.toString(10)
+                } else if (typeof value === 'object') {
+                    value = JSON.stringify(value, null, 2)
                 }
                 this.$set(this.form, field.name, { field, value })
             }
@@ -60,6 +64,12 @@
                 } else if (field.isNumber) {
                     if (value.match(/^-?\d+(?:\.\d+)?$/)) {
                         value = Number.parseFloat(value)
+                    }
+                } else if (field.isArray) {
+                    try {
+                        value = JSON.parse(value)
+                    } catch (err) {
+                        continue
                     }
                 }
 

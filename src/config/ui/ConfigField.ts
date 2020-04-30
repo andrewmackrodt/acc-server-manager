@@ -1,5 +1,6 @@
 interface ConfigFieldMetadata {
     description?: string
+    isArray?: true
     isBoolean?: true
     isEnum?: { values: object }
     isNumber?: { decimals: number }
@@ -20,6 +21,10 @@ export class ConfigField {
 
     public get description(): string {
         return this.metadata.description || 'Not documented.'
+    }
+
+    public get isArray(): boolean {
+        return !! this.metadata.isArray
     }
 
     public get isBoolean(): boolean {

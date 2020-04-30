@@ -1,6 +1,6 @@
 import { ConfigFile } from './ui/ConfigFile'
 import { Session } from './Session'
-import { Description, IsEnum, IsNotEmpty, IsNumber, Max, Min } from '../helpers/decorators'
+import { Description, IsArray, IsEnum, IsNotEmpty, IsNumber, Max, Min } from '../helpers/decorators'
 
 export enum Track {
     BARCELONA_2019 = 'barcelona_2019',
@@ -135,6 +135,10 @@ export class Event extends ConfigFile {
     public weatherRandomness: number = 1
 
     @Description(`A list of session objects.`)
+    @IsArray()
+    @Min(1)
+    @Max(3)
+    @IsNotEmpty()
     public sessions: Session[] = [
         Session.createPracticeSession(),
         Session.createQualifySession(),

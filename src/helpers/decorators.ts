@@ -1,5 +1,6 @@
 import {
     Equals as _Equals,
+    IsArray as _isArray,
     IsBoolean as _IsBoolean,
     IsEnum as _IsEnum,
     IsNotEmpty as _IsNotEmpty,
@@ -28,6 +29,14 @@ export function Equals(value: number): Function {
         Reflect.defineMetadata('equals', value, target, propertyKey)
 
         return _Equals(value)(target, propertyKey)
+    }
+}
+
+export function IsArray(): Function {
+    return (target: Record<string, any>, propertyKey: string) => {
+        Reflect.defineMetadata('isArray', true, target, propertyKey)
+
+        return _isArray()(target, propertyKey)
     }
 }
 

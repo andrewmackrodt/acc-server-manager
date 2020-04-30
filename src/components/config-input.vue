@@ -15,6 +15,7 @@
                 <input type="checkbox" :id="`check-${field.name}`" class="custom-control-input mx-auto" v-model="inputValue" />
                 <label class="custom-control-label" :for="`check-${field.name}`"></label>
             </div>
+            <textarea v-else-if="field.isArray" class="form-control" rows="23" v-model="inputValue" />
             <input v-else :type="type" :min="field.min" :max="field.max" :step="step" class="form-control" v-model="inputValue" />
         </div>
     </div>
