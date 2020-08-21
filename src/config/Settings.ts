@@ -1,6 +1,15 @@
 import { ConfigFile } from './ui/ConfigFile'
 import { Description, IsEnum, IsNotEmpty, IsNumber, IsString, Max, Min, MinLength } from '../helpers/decorators'
 
+export enum CarGroup {
+    FREE_FOR_ALL = 'FreeForAll',
+    GT3 = 'GT3',
+    GT4 = 'GT4',
+    PORSCHE_CUP = 'Cup',
+    LAMBORGHINI_SUPERTROFEO = 'ST',
+
+}
+
 export enum FormationLapType {
     /** default formation lap with position control and UI */
     DEFAULT = 3,
@@ -24,9 +33,17 @@ export class Settings extends ConfigFile {
     @IsNotEmpty()
     public adminPassword: string = ''
 
-    @Description(`Not documented.`)
-    @IsString()
-    public carGroup?: string // default = 'FreeForAll'
+    @Description(`
+        Defines the car group for this server. Possible values are
+        "FreeForAll", "GT3", "GT4", "Cup", "ST"
+        where "FreeForAll" will allow any driver to join with any car
+        (that he defined as Primary Car).
+        
+        GT3, GT4, Cup, ST will restrict this server to GT3, GT4,
+        Porsche Cup or Lamborghini Supertrofeo.`)
+    @IsEnum(CarGroup)
+    @IsNotEmpty()
+    public carGroup: CarGroup = CarGroup.FREE_FOR_ALL
 
     @Description(`
         Defines the amount of track medals that a user has to have for
@@ -112,6 +129,12 @@ export class Settings extends ConfigFile {
     @Max(1)
     @IsNotEmpty()
     public isRaceLocked: number = 1
+
+    @Description(`Not documented.`)
+    @IsNumber()
+    @Min(0)
+    @Max(1)
+    public isPrepPhaseLocked?: number //default = 0
 
     @Description(`
         If set to 1, the server will change to a random track when the 

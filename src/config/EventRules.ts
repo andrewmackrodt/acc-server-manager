@@ -10,7 +10,10 @@ export enum QualifyStandingType {
 }
 
 export class EventRules extends ConfigFile {
-    @Description(`Use 1 (fastest lap), 2 (average lap) is not yet officially supported.`)
+    @Description(`
+        1 = fastest lap, 2 = average lap (running Endurance
+        mode for multiple Q sessions) . Use 1, averaging
+        Qualy is not yet officially supported.`)
     @IsNumber()
     @IsEnum(QualifyStandingType)
     @IsNotEmpty()
@@ -36,7 +39,9 @@ export class EventRules extends ConfigFile {
         fuel efficient cars in endurance races. The stint
         time resets in the pitlane, no real stop is required.
 
-        -1 will disable the stint times.`)
+        -1 will disable the stint times. driverStintTimeSec
+        and maxTotalDrivingTime are interdependent
+        features, make sure both are set or off.`)
     @IsNumber()
     @Min(-1)
     @IsNotEmpty()
@@ -122,7 +127,13 @@ export class EventRules extends ConfigFile {
     @IsNotEmpty()
     public isMandatoryPitstopSwapDriverRequired: boolean = false
 
-    @Description(`Not documented.`)
+    @Description(`
+        Experimental/not supported: Can be used to reduce
+        the amount of tyre sets any car entry has for the
+        entire weekend. Please note that it is necessary to
+        force cars to remain in the server, or drastically
+        reduced tyre sets will be ineffective, as rejoining
+        will reset the tyre sets.`)
     @IsNumber()
     public tyreSetCount?: number // default = 50
 }

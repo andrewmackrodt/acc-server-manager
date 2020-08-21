@@ -50,8 +50,7 @@ export class Event extends ConfigFile {
     public track: Track = Track.MOUNT_PANORAMA_2019
 
     @Description(`A user defined string that will be transferred to the result outputs.`)
-    @IsNotEmpty()
-    public metaData: string = Track.MOUNT_PANORAMA_2019
+    public metaData?: string
 
     @Description(`Not documented.`)
     @IsEnum(EventType)
@@ -133,6 +132,32 @@ export class Event extends ConfigFile {
     @Min(0)
     @IsNotEmpty()
     public weatherRandomness: number = 1
+
+    @Description(`
+        Experimental/not supported: if set to 1, this will limit the
+        maximum rain/wetness to roughly 2/3 of the maximum values,
+        translating to something between medium and heavy rain.
+        
+        It may be useful if you feel forced to run very low cloudLevel
+        and weatherRandomness values just to avoid thunderstorm;
+        however high levels (0.4+ clouds combined with 5+
+        randomness) will still result in quite serious conditions.`)
+    @IsNumber()
+    @Min(0)
+    @Max(1)
+    public simracerWeatherConditions?: number
+
+    @Description(`
+        Experimental/not supported: if set to 1, the server will take the
+        rain, cloud, temperature, rain levels literally and make sure
+        whatever is set up never changes. Daytime transitions still
+        happen visually, but do not affect the temperatures or road
+        wetness. Also rubber/grip is always the same. This is intended
+        to be used for private league qualification servers only.`)
+    @IsNumber()
+    @Min(0)
+    @Max(1)
+    public isFixedConditionQualification?: number
 
     @Description(`A list of session objects.`)
     @IsArray()

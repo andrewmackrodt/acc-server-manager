@@ -80,6 +80,7 @@
                 .filter(([k]) => ! k.match(/^\d+$/))
                 .map(([text, value]) => {
                     text = titleCase(text.replace(/_/g, ' '))
+                        .replace(/Gt(\d+)/g, 'GT$1')
 
                     return { text, value }
                 })
