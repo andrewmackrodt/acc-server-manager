@@ -1,23 +1,31 @@
 <template>
     <div class="form-group row mb-4">
-        <label class="col-6 col-form-label">
-            <p class="font-weight-bold" :title="field.name">{{ title }}</p>
-            <p class="description small">{{ field.description }}</p>
-        </label>
-        <div class="col-1"></div>
-        <div class="col-5">
-            <select v-if="isSelect" class="form-control" v-model="inputValue">
-                <option v-for="option of options" :value="option.value">
-                    {{ option.text }}
-                </option>
-            </select>
-            <div v-else-if="isCheckbox" class="custom-control custom-switch">
-                <input type="checkbox" :id="`check-${field.name}`" class="custom-control-input mx-auto" v-model="inputValue" />
-                <label class="custom-control-label" :for="`check-${field.name}`"></label>
-            </div>
-            <textarea v-else-if="field.isArray" class="form-control" rows="23" v-model="inputValue" />
-            <input v-else :type="type" :min="field.min" :max="field.max" :step="step" class="form-control" v-model="inputValue" />
+        <div class="col-12" v-if="field.isArray">
+            <label class="col-form-label">
+                <p class="font-weight-bold" :title="field.name">{{ title }}</p>
+                <p class="description small">{{ field.description }}</p>
+            </label>
+            <config-array :items="inputValue" />
         </div>
+        <template v-else>
+            <label class="col-6 col-form-label">
+                <p class="font-weight-bold" :title="field.name">{{ title }}</p>
+                <p class="description small">{{ field.description }}</p>
+            </label>
+            <div class="col-1"></div>
+            <div class="col-5">
+                <select v-if="isSelect" class="form-control" v-model="inputValue">
+                    <option v-for="option of options" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
+                <div v-else-if="isCheckbox" class="custom-control custom-switch">
+                    <input type="checkbox" :id="`check-${field.name}`" class="custom-control-input mx-auto" v-model="inputValue" />
+                    <label class="custom-control-label" :for="`check-${field.name}`"></label>
+                </div>
+                <input v-else :type="type" :min="field.min" :max="field.max" :step="step" class="form-control" v-model="inputValue" />
+            </div>
+        </template>
     </div>
 </template>
 
@@ -34,8 +42,13 @@
     import { Component, Prop, Vue } from 'vue-property-decorator'
     import { ConfigField } from '../config/ui/ConfigField'
     import { titleCase } from '../helpers/text'
+    import ConfigArray from './config-array.vue'
 
-    @Component
+    @Component({
+        components: {
+            ConfigArray,
+        },
+    })
     export default class ConfigInputComponent extends Vue {
         @Prop() protected readonly field!: ConfigField
 
@@ -44,10 +57,13 @@
 
         protected inputValue: any = ''
 
+        public beforeCreate() {
+            // cannot be defined in @Component as recursive component
+            this.$options.components!.Foo = require('./config-form.vue').default
+        }
+
         public created() {
-            this.inputValue = this.field.isArray
-                ? JSON.stringify(this.value, null, 2)
-                : this.value
+            this.inputValue = this.value
 
             this.$watch('inputValue', this.onChange)
         }

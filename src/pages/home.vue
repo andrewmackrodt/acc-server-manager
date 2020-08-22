@@ -18,7 +18,7 @@
                  :class="['tab-pane', 'fade', ...(name === 'configuration' ? ['show', 'active'] : [])]"
                  :id="name"
                  :aria-labelledby="`${name}-tab`">
-                <config-form :config="config" :name="name" />
+                <config-tab :config="config" :name="name" />
             </div>
         </div>
     </div>
@@ -37,11 +37,11 @@
     import { AssistRules } from '../config/AssistRules'
 
     // components
-    import ConfigForm from '../components/config-form.vue'
+    import ConfigTab from '../components/config-tab.vue'
 
     @Component({
         components: {
-            ConfigForm,
+            ConfigTab: ConfigTab,
         },
     })
     export default class HomePage extends Vue {
